@@ -1,0 +1,42 @@
+name: Flutter CI
+
+# This triggers the script whenever you push code
+on:
+  push:
+      branches: [ main ]
+        pull_request:
+            branches: [ main ]
+
+            jobs:
+              build:
+                  runs-on: ubuntu-latest
+
+                      steps:
+                            # 1. Pull the code from your repo
+                                  - uses: actions/checkout@v4
+
+                                        # 2. Set up the Java environment (Required for Android/Gradle)
+                                              - uses: actions/setup-java@v3
+                                                      with:
+                                                                distribution: 'zulu'
+                                                                          java-version: '17'
+
+                                                                                # 3. Install the Flutter CLI
+                                                                                      - uses: subosito/flutter-action@v2
+                                                                                              with:
+                                                                                                        flutter-version: '3.19.0' # Or 'any' for latest stable
+                                                                                                                  channel: 'stable'
+
+                                                                                                                        # 4. Run your Flutter CLI commands
+                                                                                                                              - name: Install dependencies
+                                                                                                                                      run: flutter pub get
+
+                                                                                                                                            - name: Check for errors (Linting)
+                                                                                                                                                    run: flutter analyze
+
+                                                                                                                                                          - name: Run Tests
+                                                                                                                                                                  run: flutter test
+
+                                                                                                                                                                        - name: Build Android APK
+                                                                                                                                                                                run: flutter build apk --debug
+                                                                                                                                                                                

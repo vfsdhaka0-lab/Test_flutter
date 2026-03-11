@@ -21,11 +21,12 @@ jobs:
         with:
           channel: 'stable'
 
-      # Modified command to only generate Android files
+      # Creates only Android and Dart files
       - name: Create Flutter Project (Android Only)
         run: |
           flutter create --org com.aman.ai --project-name test_flutter --platforms android .
 
+      # Saves the files to your 'Test_flutter' repository
       - name: Commit and Push generated files
         run: |
           git config --global user.name "github-actions[bot]"
@@ -39,6 +40,3 @@ jobs:
           else
             echo "No changes to commit"
           fi
-
-      - name: Build Debug APK
-        run: flutter build apk --debug

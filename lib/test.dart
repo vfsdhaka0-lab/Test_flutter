@@ -1,1 +1,1 @@
-// Created in Aman IDE
+void main

@@ -1,4 +1,4 @@
-name: Bootstrap Flutter Project
+name: Bootstrap Android Flutter Project
 
 on:
   push:
@@ -9,44 +9,36 @@ jobs:
   bootstrap:
     runs-on: ubuntu-latest
     
-    # Allows GitHub to push the new files back to your repo
     permissions:
       contents: write
 
     steps:
-      # 1. Pull the current repo (currently just the .yml file)
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Install the Flutter CLI on the GitHub Runner
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
-      # 3. Create the Flutter project (Generates pubspec, android, lib, etc.)
-      - name: Create Flutter Project
+      # Modified command to only generate Android files
+      - name: Create Flutter Project (Android Only)
         run: |
-          # The '.' tells Flutter to create the project in the current folder
-          flutter create --org com.aman.ai --project-name test_flutter .
+          flutter create --org com.aman.ai --project-name test_flutter --platforms android .
 
-      # 4. Git setup and push
       - name: Commit and Push generated files
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Stage all new files (android/, lib/, pubspec.yaml, etc.)
           git add .
           
-          # Check if files were created, then commit and push
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Auto-generate Flutter project structure"
+            git commit -m "Generate Flutter project (Android only)"
             git push
           else
             echo "No changes to commit"
           fi
 
-      # 5. Verify the build works after generation
       - name: Build Debug APK
         run: flutter build apk --debug
